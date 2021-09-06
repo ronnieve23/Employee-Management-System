@@ -13,7 +13,7 @@ function startApp() {
         type: 'list',
         name: 'menu',
         message: 'What Would You Like to Do?',
-        choices: ['View All Employees', 'View All Departments', 'View All Job Roles', 'Add A Department', 'Add A Job Role', 'Add A New Employee', 'Update Employee Role', 'Update Employee Manager', 'Delete Department'],
+        choices: ['View All Employees', 'View All Departments', 'View All Job Roles', 'Add A Department', 'Add A Job Role', 'Add A New Employee', 'Update Employee Role', 'Update Employee Manager', 'Delete Employee','Delete Job', 'Delete Department'],
     }).then(answer => {
         switch (answer.menu) {
             case 'View All Employees':
@@ -40,9 +40,16 @@ function startApp() {
             case 'Update Employee Manager':
                 updateEmployeeManager();
                 break;
+            case 'Delete Employee':
+                deletEmployee();
+                break;
+            case 'Delete Job':
+                deleteJob();
+                break;
             case 'Delete Department':
                 deleteDeparment();
                 break;
+            
         }
     })
 
@@ -247,6 +254,51 @@ function updateEmployeeManager() {
         });
     });
 };
+function deletEmployee() {
+    inquirer.prompt([
+        {
+            name: 'employee_id',
+            type: 'number',
+            message: 'Enter the ID Number of the Employee You Would Like to Delete:'
+        }
+    ]).then(function (response) {
+        db.query("DELETE FROM employee WHERE id = ?", [response.employee_id], function (err) {
+            if (err) throw err;
+            console.log("THIS EMPLOYEE HAS BEEN TERMINATED");
+
+            db.query(`SELECT * FROM employee`, (err, result) => {
+                if (err) {
+                    return;
+                }
+                console.table(result);
+                startApp();
+            });
+        });
+    });
+};
+
+function deleteJob() {
+    inquirer.prompt([
+        {
+            name: 'role_id',
+            type: 'number',
+            message: 'Enter the ID Number of the Job Role You Would Like to Delete:'
+        }
+    ]).then(function (response) {
+        db.query("DELETE FROM role WHERE id = ?", [response.role_id], function (err) {
+            if (err) throw err;
+            console.log("THIS JOB ROLE HAS BEEN DELETED");
+
+            db.query(`SELECT * FROM role`, (err, result) => {
+                if (err) {
+                    return;
+                }
+                console.table(result);
+                startApp();
+            });
+        });
+    });
+};
 
 function deleteDeparment() {
     inquirer.prompt([
@@ -270,6 +322,7 @@ function deleteDeparment() {
         });
     });
 };
+
 
 
 
