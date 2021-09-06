@@ -110,9 +110,9 @@ function addJob () {
             message: 'How Much Is the Salary For this Job Title? (do not use commas or periods)'
         },
         {
-            name: 'departmet_id',
+            name: 'department_id',
             type: 'input',
-            message: 'Please Enter the Department ID Numbner the New Job Title Should Belong To:'
+            message: 'Please Enter the Department ID Number the New Job Title Should Belong To:'
         },
     ]).then (function (response){
         db.query("INSERT INTO role (title,salary,department_id) VALUES (?,?,?)", [response.title,response.salary,response.department_id],function (err){
@@ -138,14 +138,14 @@ function addEmployee () {
         {
             name: 'role_id',
             type: 'number',
-            message: 'Please Enter the Role ID Numbner the New Employee Should Belong To:'
+            message: 'Please Enter the Role ID Number the New Employee Should Belong To:'
         },{
             name: 'manager_id',
             type: 'number',
             message: "Please Enter the ID Number of the Manager the New Employee Would Be Reporting To:"
         },
     ]).then (function (response){
-        db.query("INSERT INTO employee (first_name,last_name,role_id,manager_id) VALUES (?,?,?,?)", [response.first_name,response.last_name,response.role_id,response.manger_id],function (err){
+        db.query("INSERT INTO employee (first_name,last_name,role_id,manager_id) VALUES (?,?,?,?)", [response.first_name,response.last_name,response.role_id,response.manager_id],function (err){
         if (err) throw (err);
         console.log ('THE NEW JOB EMPLOYEE HAS BEEN CREATED');
         startApp();
