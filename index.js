@@ -12,12 +12,18 @@ function startApp () {
             type: 'list',
             name: 'menu',
             message: 'What Would You Like to Do?',
-            choices: ['View All Employees'],
+            choices: ['View All Employees', 'View All Departments', 'View All Job Roles'],
         }).then ( answer => {
             switch (answer.menu){
                 case 'View All Employees':
                     viewEmployees ();
                     break;
+                case 'View All Departments':
+                    viewDepartments ();
+                    break;
+               case 'View All Job Roles':
+                   viewRoles ();
+                   break;
             }
         })
         
@@ -36,6 +42,24 @@ function viewEmployees() {
                 LEFT JOIN department ON role.department_id = department.id
                 LEFT JOIN employee AS manager ON employee.manager_id = manager.id
                 ORDER By employee.id`;
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.table(result);
+        startApp();
+    });
+};
+
+function viewDepartments () {
+    const sql = `SELECT * FROM department`;
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.table(result);
+        startApp();
+    });
+};
+
+function viewRoles () {
+    const sql = `SELECT * FROM role`;
     db.query(sql, (err, result) => {
         if (err) throw err;
         console.table(result);
