@@ -13,7 +13,7 @@ function startApp() {
         type: 'list',
         name: 'menu',
         message: 'What Would You Like to Do?',
-        choices: ['View All Employees', 'View All Departments', 'View All Job Roles', 'Add A Department', 'Add A Job Title', 'Add A New Employee', 'Update Employee Role'],
+        choices: ['View All Employees', 'View All Departments', 'View All Job Roles', 'Add A Department', 'Add A Job Role', 'Add A New Employee', 'Update Employee Role'],
     }).then(answer => {
         switch (answer.menu) {
             case 'View All Employees':
@@ -94,12 +94,17 @@ function addDepartment() {
         db.query(sql, params, (err, result) => {
             if (err) throw err;
             console.log('THE DEPARTMENT HAS BEEN ADDED TO THE DATABASE');
-            console.table(result);
-            startApp();
+
+            db.query(`SELECT * FROM department`, (err, result) => {
+                if (err) {
+                    return;
+                }
+                console.table(result);
+                startApp();
+            });
         });
     });
 };
-
 function addJob() {
     inquirer.prompt([
         {
@@ -121,7 +126,13 @@ function addJob() {
         db.query("INSERT INTO role (title,salary,department_id) VALUES (?,?,?)", [response.title, response.salary, response.department_id], function (err) {
             if (err) throw (err);
             console.log('THE NEW JOB ROLE HAS BEEN CREATED');
-            startApp();
+            db.query(`SELECT * FROM role`, (err, result) => {
+                if (err) {
+                    return;
+                }
+                console.table(result);
+                startApp();
+            });
         });
     });
 };
@@ -152,7 +163,13 @@ function addEmployee() {
         db.query("INSERT INTO employee (first_name,last_name,role_id,manager_id) VALUES (?,?,?,?)", [response.first_name, response.last_name, response.role_id, response.manager_id], function (err) {
             if (err) throw (err);
             console.log('THE NEW JOB EMPLOYEE HAS BEEN CREATED');
-            startApp();
+            db.query(`SELECT * FROM employee`, (err, result) => {
+                if (err) {
+                    return;
+                }
+                console.table(result);
+                startApp();
+            });
         });
     });
 };
@@ -179,9 +196,15 @@ function updateEmployeeRole() {
         db.query("UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?", [response.role_id, response.first_name, response.last_name], function (err) {
             if (err) throw err;
             console.log("YOUR EMPLOYEE'S ROLE HAS BEEN UPDATED");
-            startApp();
+            db.query(`SELECT * FROM employee`, (err, result) => {
+                if (err) {
+                    return;
+                }
+                console.table(result);
+                startApp();
             });
-        })
+        });
+    });
 };
 
 
