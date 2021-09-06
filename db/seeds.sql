@@ -8,7 +8,7 @@ INSERT INTO role (title, salary, department_id)
 VALUES
     ('Chief Executive Officer', 200000, 1),
     ('Chief Technology Officer', 150000, 1),
-    ('Director, Solutions Development', 100000, 2),
+    ('Solutions Development Director', 100000, 2),
     ('Human Resources Director', 100000, 3),
     ('Developer', 85000, 2),
     ('HR Recruiter', 50000, 3);

@@ -13,7 +13,7 @@ function startApp() {
         type: 'list',
         name: 'menu',
         message: 'What Would You Like to Do?',
-        choices: ['View All Employees', 'View All Departments', 'View All Job Roles', 'Add A Department', 'Add A Job Role', 'Add A New Employee', 'Update Employee Role'],
+        choices: ['View All Employees', 'View All Departments', 'View All Job Roles', 'Add A Department', 'Add A Job Role', 'Add A New Employee', 'Update Employee Role', 'Update Employee Manager', 'Delete Department'],
     }).then(answer => {
         switch (answer.menu) {
             case 'View All Employees':
@@ -36,6 +36,12 @@ function startApp() {
                 break;
             case 'Update Employee Role':
                 updateEmployeeRole();
+                break;
+            case 'Update Employee Manager':
+                updateEmployeeManager();
+                break;
+            case 'Delete Department':
+                deleteDeparment();
                 break;
         }
     })
@@ -105,6 +111,7 @@ function addDepartment() {
         });
     });
 };
+
 function addJob() {
     inquirer.prompt([
         {
@@ -206,6 +213,64 @@ function updateEmployeeRole() {
         });
     });
 };
+
+function updateEmployeeManager() {
+    inquirer.prompt([
+        {
+            name: 'first_name',
+            type: 'input',
+            message: 'Please Enter the First Name of the Employee You Want To Update'
+        },
+        {
+            name: 'last_name',
+            type: 'input',
+            message: 'Please Enter the Last Name of the Employee You Want To Update'
+        },
+        {
+            name: 'manager_id',
+            type: 'number',
+            message: "Please Enter the Manager's ID Number of the Employee's New Manager:"
+
+        }
+    ]).then(function (response) {
+        db.query("UPDATE employee SET manager_id = ? WHERE first_name = ? AND last_name = ?", [response.manager_id, response.first_name, response.last_name], function (err) {
+            if (err) throw err;
+            console.log("YOUR EMPLOYEE'S MANAGER HAS BEEN UPDATED");
+
+            db.query(`SELECT * FROM employee`, (err, result) => {
+                if (err) {
+                    return;
+                }
+                console.table(result);
+                startApp();
+            });
+        });
+    });
+};
+
+function deleteDeparment() {
+    inquirer.prompt([
+        {
+            name: 'department_id',
+            type: 'number',
+            message: 'Enter the ID Number of the Department You Would Like to Delete:'
+        }
+    ]).then(function (response) {
+        db.query("DELETE FROM department WHERE id = ?", [response.department_id], function (err) {
+            if (err) throw err;
+            console.log("THIS DEPARTMENT HAS BEEN DELETED");
+
+            db.query(`SELECT * FROM department`, (err, result) => {
+                if (err) {
+                    return;
+                }
+                console.table(result);
+                startApp();
+            });
+        });
+    });
+};
+
 
 
 startApp();
