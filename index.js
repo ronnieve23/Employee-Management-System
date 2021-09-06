@@ -12,7 +12,7 @@ function startApp () {
             type: 'list',
             name: 'menu',
             message: 'What Would You Like to Do?',
-            choices: ['View All Employees', 'View All Departments', 'View All Job Roles'],
+            choices: ['View All Employees', 'View All Departments', 'View All Job Roles', 'Add A Department', 'Add A Job Title'],
         }).then ( answer => {
             switch (answer.menu){
                 case 'View All Employees':
@@ -21,9 +21,16 @@ function startApp () {
                 case 'View All Departments':
                     viewDepartments ();
                     break;
-               case 'View All Job Roles':
-                   viewRoles ();
-                   break;
+                 case 'View All Job Roles':
+                    viewRoles ();
+                    break;
+                case 'Add A Department':
+                    addDepartment ();
+                    break;
+                case 'Add A Job Title':
+                    addDepartment ();
+                    break;
+            
             }
         })
         
@@ -65,6 +72,25 @@ function viewRoles () {
         console.table(result);
         startApp();
     });
+};
+
+function addDepartment (){
+    inquirer.prompt ([
+        {
+            name: 'department_name',
+            type: 'input',
+            message: 'What Department Would You Like to Add to the Database>'
+        }
+    ]).then ((answer) => {
+        const sql = `INSERT INTO department (department_name)
+                     VALUES (?)`;
+        const params = [answer.department_name];
+        db.query(sql,params,(err, result) => {
+            if (err) throw err;
+            console.log('THE DEPARTMENT HAS BEEN ADDED TO THE DATABASE');
+            startApp();
+        });
+    })
 };
 
 startApp();
