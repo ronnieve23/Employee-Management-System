@@ -6,25 +6,14 @@ const inquirer = require('inquirer');
 const cTable = require('console.table');
 const db = require('./db/connection');
 
-
-
 function startApp() {
     inquirer.prompt({
         type: 'list',
         name: 'menu',
         message: 'What Would You Like to Do?',
-        choices: ['View All Employees', 'View All Departments', 'View All Job Roles', 'Add A Department', 'Add A Job Role', 'Add A New Employee', 'Update Employee Role', 'Update Employee Manager', 'Delete Employee','Delete Job', 'Delete Department'],
+        choices: [ 'Add A Department', 'Add A Job Role', 'Add A New Employee', 'View All Employees', 'View All Departments', 'View All Job Roles', 'Update Employee Role', 'Update Employee Manager', 'Delete Employee','Delete Job', 'Delete Department'],
     }).then(answer => {
         switch (answer.menu) {
-            case 'View All Employees':
-                viewEmployees();
-                break;
-            case 'View All Departments':
-                viewDepartments();
-                break;
-            case 'View All Job Roles':
-                viewRoles();
-                break;
             case 'Add A Department':
                 addDepartment();
                 break;
@@ -33,6 +22,15 @@ function startApp() {
                 break;
             case 'Add A New Employee':
                 addEmployee();
+                break;
+            case 'View All Employees':
+                viewEmployees();
+                break;
+            case 'View All Departments':
+                viewDepartments();
+                break;
+            case 'View All Job Roles':
+                viewRoles();
                 break;
             case 'Update Employee Role':
                 updateEmployeeRole();
@@ -236,7 +234,7 @@ function updateEmployeeManager() {
         {
             name: 'manager_id',
             type: 'number',
-            message: "Please Enter the Manager's ID Number of the Employee's New Manager:"
+            message: "Please Enter the ID Number of the Employee's New Manager:"
 
         }
     ]).then(function (response) {
